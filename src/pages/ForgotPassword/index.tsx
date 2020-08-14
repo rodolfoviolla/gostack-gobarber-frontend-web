@@ -13,8 +13,9 @@ import logoImg from '../../assets/logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container, Content, Background, AnimationContainer } from './styles';
 import api from '../../services/api';
+
+import { Container, Content, Background, AnimationContainer } from './styles';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -97,7 +98,7 @@ const ForgotPassword: React.FC = () => {
             />
 
             <Button loading={loading} type="submit">
-              Entrar
+              Recuperar
             </Button>
           </Form>
 
