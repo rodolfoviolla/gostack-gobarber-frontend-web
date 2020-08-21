@@ -37,12 +37,10 @@
 </p>
 
 <p align="center">
-  <img width="416" height="250" src="./assets/01-Logon.png" alt="Logon">
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img width="416" height="250" src="./assets/05-MeuPerfil.png" alt="Meu Perfil">
-  <img width="416" height="250" src="./assets/06-HorariosAgendadosHoje.png" alt="Horários Agendados Hoje">
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img width="416" height="250" src="./assets/07-HorariosAgendados.png" alt="Horários Agendados">
+  <img width="833" height="500" src="./assets/01-Logon.png" alt="Logon">
+  <img width="833" height="500" src="./assets/05-MeuPerfil.png" alt="Meu Perfil">
+  <img width="833" height="500" src="./assets/06-HorariosAgendadosHoje.png" alt="Horários Agendados Hoje">
+  <img width="833" height="500" src="./assets/07-HorariosAgendados.png" alt="Horários Agendados">
 </p>
 
 ### Features
