@@ -30,7 +30,7 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#pr%C3%A9-requisitos">Pré-requisitos</a> • 
-  <a href="#rodar-o-servidor-localmente">Rodar o servidor localmente</a> • 
+  <a href="#rodar-a-aplica%C3%A7%C3%A3o-localmente">Rodar a aplicação localmente</a> • 
   <a href="#tecnologias">Tecnologias</a> • 
   <a href="#autor">Autor</a> • 
   <a href="#licen%C3%A7a">Licença</a>
