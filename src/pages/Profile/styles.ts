@@ -66,6 +66,13 @@ export const AvatarInput = styled.div`
   position: relative;
   align-self: center;
 
+  > svg {
+    width: 186px;
+    height: 186px;
+    border-radius: 50%;
+    color: #999591;
+  }
+
   img {
     width: 186px;
     height: 186px;

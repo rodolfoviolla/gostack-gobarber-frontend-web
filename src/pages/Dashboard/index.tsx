@@ -3,7 +3,7 @@ import { isToday, format, parseISO, isAfter } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { FiPower, FiClock } from 'react-icons/fi';
+import { FiPower, FiClock, FiUser } from 'react-icons/fi';
 
 import { Link } from 'react-router-dom';
 import {
@@ -148,7 +148,11 @@ const Dashboard: React.FC = () => {
           <img src={logoImg} alt="GoBarber" />
 
           <Profile>
-            <img src={user.avatar_url} alt={user.name} />
+            {user.avatar_url ? (
+              <img src={user.avatar_url} alt={user.name} />
+            ) : (
+              <FiUser />
+            )}
 
             <div>
               <span>Bem-vindo,</span>
@@ -158,7 +162,7 @@ const Dashboard: React.FC = () => {
             </div>
           </Profile>
 
-          <button type="button" onClick={signOut}>
+          <button type="button" onClick={() => signOut()}>
             <FiPower />
           </button>
         </HeaderContent>

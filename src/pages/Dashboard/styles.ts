@@ -36,6 +36,13 @@ export const Profile = styled.div`
   align-items: center;
   margin-left: 80px;
 
+  svg {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    color: #999591;
+  }
+
   img {
     width: 56px;
     height: 56px;

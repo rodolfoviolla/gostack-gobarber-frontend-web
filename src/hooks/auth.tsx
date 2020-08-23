@@ -1,4 +1,7 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
+import ms from 'ms';
+import { addMilliseconds, isAfter } from 'date-fns';
+
 import api from '../services/api';
 
 interface User {
@@ -10,6 +13,7 @@ interface User {
 
 interface AuthState {
   token: string;
+  tokenExpiration: Date;
   user: User;
 }
 
@@ -30,12 +34,28 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token');
+    const tokenExpirationItem = localStorage.getItem(
+      '@GoBarber:token-expiration',
+    );
     const user = localStorage.getItem('@GoBarber:user');
 
-    if (token && user) {
-      api.defaults.headers.authorization = `Bearer ${token}`;
+    if (token && tokenExpirationItem && user) {
+      const today = new Date(Date.now());
+      const tokenExpiration = new Date(JSON.parse(tokenExpirationItem));
 
-      return { token, user: JSON.parse(user) };
+      if (isAfter(tokenExpiration, today)) {
+        api.defaults.headers.authorization = `Bearer ${token}`;
+
+        return {
+          token,
+          tokenExpiration,
+          user: JSON.parse(user),
+        };
+      }
+
+      localStorage.removeItem('@GoBarber:token');
+      localStorage.removeItem('@GoBarber:token-expiration');
+      localStorage.removeItem('@GoBarber:user');
     }
 
     return {} as AuthState;
@@ -47,18 +67,28 @@ const AuthProvider: React.FC = ({ children }) => {
       password,
     });
 
-    const { token, user } = response.data;
+    const { token, user, expiresIn } = response.data;
+
+    const expiresInMilliseconds = Number(ms(expiresIn));
+
+    let tokenExpiration = new Date(Date.now());
+    tokenExpiration = addMilliseconds(tokenExpiration, expiresInMilliseconds);
 
     localStorage.setItem('@GoBarber:token', token);
+    localStorage.setItem(
+      '@GoBarber:token-expiration',
+      JSON.stringify(tokenExpiration),
+    );
     localStorage.setItem('@GoBarber:user', JSON.stringify(user));
 
     api.defaults.headers.authorization = `Bearer ${token}`;
 
-    setData({ token, user });
+    setData({ token, tokenExpiration, user });
   }, []);
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@GoBarber:token');
+    localStorage.removeItem('@GoBarber:token-expiration');
     localStorage.removeItem('@GoBarber:user');
 
     setData({} as AuthState);
@@ -70,6 +100,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
       setData({
         token: data.token,
+        tokenExpiration: data.tokenExpiration,
         user,
       });
     },
