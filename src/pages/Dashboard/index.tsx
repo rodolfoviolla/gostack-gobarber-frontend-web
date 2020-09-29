@@ -4,8 +4,16 @@ import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FiPower, FiClock, FiUser } from 'react-icons/fi';
-
 import { Link } from 'react-router-dom';
+import socketIo from 'socket.io-client';
+
+import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
+
+import api from '../../services/api';
+
+import logoImg from '../../assets/logo.svg';
+
 import {
   Container,
   Header,
@@ -18,10 +26,6 @@ import {
   Appointment,
   Calendar,
 } from './styles';
-
-import logoImg from '../../assets/logo.svg';
-import { useAuth } from '../../hooks/auth';
-import api from '../../services/api';
 
 interface MonthAvailabilityItem {
   day: number;
@@ -40,14 +44,33 @@ interface Appointment {
 
 const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
+  const { addToast } = useToast();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailabilityItem[]
   >([]);
-
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+  const socket = useMemo(
+    () =>
+      socketIo(process.env.REACT_APP_API_URL || '', {
+        query: {
+          user_id: user.id,
+        },
+      }),
+    [user.id],
+  );
+
+  useEffect(() => {
+    socket.on('notification', (notification: string) => {
+      addToast({
+        type: 'info',
+        title: notification,
+      });
+    });
+  }, [socket, addToast]);
 
   const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
     if (modifiers.available && !modifiers.disabled) {
